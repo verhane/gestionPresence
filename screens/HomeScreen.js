@@ -16,7 +16,8 @@ const HomeScreen = ({route,navigation})=>{
     // const {user} =route.params;
     const currentDate = new Date();
     useEffect(()=>{
-        setStoreUser(user.id)
+        setStoreUser(user.id);
+
     },[])
     const handleLatestPointage = async () => {
         const getToken = async () => {
@@ -31,7 +32,7 @@ const HomeScreen = ({route,navigation})=>{
         };
         const token = await getToken();
                 const axiosfetch = async ()=> {
-                    axios.get('http://192.168.69.238:1212/api/getLastPointages/'+storeUser,
+                    axios.get('http://192.168.100.68:1212/api/getLastPointages/'+storeUser,
                         {
                             headers: {
                                 'Authorization': `Bearer ${token}`
@@ -40,8 +41,9 @@ const HomeScreen = ({route,navigation})=>{
                     ).then(function (response) {
                         // handle success
                         setLatestPointages(response.data[0])
-                        console.warn(response);
-                        console.warn(user.id);
+                        // console.warn(response);
+                        // console.warn(response.data[1]);
+                        setAdminName(response.data[1]);
                     })
                         .catch(function (error) {
                             // handle error
@@ -62,8 +64,7 @@ const HomeScreen = ({route,navigation})=>{
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
             <View>
                 <Text style={{fontWeight:'bold'}}>
-
-                    {user.name}
+                    {adminName}
                 </Text>
             </View>
             <View>
@@ -76,7 +77,7 @@ const HomeScreen = ({route,navigation})=>{
       </View>
         <Card style={styles.card}>
             <View style={{marginBottom:25}}>
-                <Text style={{marginTop:20,textTransform:'uppercase'}}>last pointage :</Text>
+            <Text style={{marginTop:20,textTransform:'uppercase'}}>{i18n.t('dernierPointage')} :</Text>
             </View>
             <View style={{flexDirection:'row' ,justifyContent:'space-around' ,marginBottom:15}}>
                 <View>
@@ -114,7 +115,7 @@ const HomeScreen = ({route,navigation})=>{
         </Card>
       <View style={{position:'relative'}}>
           <Button
-              label={'new pointage'.toUpperCase()}
+              label={i18n.t('newPointage').toUpperCase()}
               style={{backgroundColor:'#00B9E8',marginTop:30}}
               onPress={()=>navigation.push('ajoutePointage')}
           />

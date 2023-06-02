@@ -15,8 +15,8 @@ const Login = ({navigation})=> {
     const [toastVisible , setToastVisible] = useState(false);
     const [msgError ,setMsgError]= useState(null);
     const validationSchema = Yup.object().shape({
-        email: Yup.string().required('Email is required'),
-        password: Yup.string().required('Password is required'),
+        email: Yup.string().required('Email est obligatoire'),
+        password: Yup.string().required('Password est obligatoire'),
     });
     const globalVariable = useStore((state) => state.globalVariable);
     const setGlobalVariable = useStore((state) => state.setGlobalVariable);
@@ -42,7 +42,7 @@ const Login = ({navigation})=> {
                initialValues={{ email: '', password: '' }}
                validationSchema={validationSchema}
                onSubmit={(values,{ setSubmitting }) => {
-                   axios.post('http://192.168.69.238:1212/api/login', {
+                   axios.post('http://192.168.100.68:1212/api/login', {
                        email: values.email,
                        password: values.password ,
                        device_name:'gestionAbsent'

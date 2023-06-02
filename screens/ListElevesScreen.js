@@ -9,7 +9,7 @@ import moment from "moment/moment";
 import {AntDesign} from "@expo/vector-icons";
 import {Ionicons} from '@expo/vector-icons';
 import axios from "../config/axios";
-
+import i18n from "../i18n";
 
 function Item(props) {
     return null;
@@ -54,7 +54,7 @@ const ListElevesScreen = ({route, navigation}) => {
                 Authorization: `Bearer ${token}`,
             };
             setLoading(true)
-            fetch("http://192.168.69.238:1212/api/listEleve/" + classeId, {headers})
+            fetch("http://192.168.100.68:1212/api/listEleve/" + classeId, {headers})
                 .then((response) => response.json())
                 .then((responseJson) => {
                     setClasse(responseJson.classe);
@@ -105,6 +105,7 @@ const ListElevesScreen = ({route, navigation}) => {
 
     const handlePickerItem = (value) => {
         setEtat(value);
+        setLoading(true)
         AsyncStorage.getItem('AccesToken').then(token => {
             const headers = {
                 Accept: 'application/json',
@@ -298,7 +299,7 @@ const ListElevesScreen = ({route, navigation}) => {
         // }
     }
     if (loading)
-        return <LoaderScreen message={'loading'} color={Colors.grey40}/>
+        return <LoaderScreen message={'chargement'} color={Colors.grey40}/>
 
     return (
         <>
@@ -307,7 +308,7 @@ const ListElevesScreen = ({route, navigation}) => {
                     <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{marginBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View>
-                            <Text style={styles.pointage_heading}> classe: <Text text60BO>{classe.libelle_fr}</Text>
+                            <Text style={styles.pointage_heading}> {i18n.t('classe')} : <Text text60BO>{classe.libelle_fr}</Text>
                             </Text>
                         </View>
                         <View>
@@ -329,10 +330,10 @@ const ListElevesScreen = ({route, navigation}) => {
                     </View>
                     <View style={{marginBottom: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View>
-                            <Text style={{fontWeight: 'bold'}}>Date: {moment(dates).format('D-M-Y')}</Text>
+                            <Text style={{fontWeight: 'bold'}}>{i18n.t('date')} :{moment(dates).format('D-M-Y')}</Text>
                         </View>
                         <View>
-                            <Text style={{fontWeight: 'bold'}}>Heure: {heure}</Text>
+                            <Text style={{fontWeight: 'bold'}}>{i18n.t('heure')} :{heure}</Text>
                         </View>
                     </View>
 

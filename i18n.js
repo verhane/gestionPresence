@@ -3,6 +3,7 @@ import * as Localization from 'expo-localization';
 import ar from './assets/lang/ar';
 import fr from './assets/lang/fr';
 import { I18n } from 'i18n-js';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Set the fallback language
 
@@ -17,9 +18,24 @@ i18n.translations = {
 };
 i18n.fallbacks = true;
 i18n.defaultLocale = 'fr';
+const languagePreference = async () => {
+    try {
+        const value = await AsyncStorage.getItem('@language');
+        if (value !== null) {
+            i18n.locale = value  ;
+            return value;
 
-// Set the initial language based on the device's locale
-i18n.locale = 'fr';
+        }
+    } catch (error) {
+        console.log('Error loading language preference:', error);
+    }
+    // Default language if preference not set
+    return 'fr';
+    i18n.locale = 'fr';
+};
+languagePreference();
+// Set the language based on the preference
+
 
 // Set the text direction based on the language
 const locale = Localization.locale;

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import {I18nManager, StyleSheet} from 'react-native';
 import {View, Text, Button, Colors, Checkbox, Card, DateTimePicker, Picker, LoaderScreen} from 'react-native-ui-lib';
 import {SelectList} from "react-native-dropdown-select-list";
 import React, {createContext, useContext, useEffect, useState} from "react";
@@ -37,6 +37,21 @@ export default function App() {
         setTimeout(()=>{
             setLoading(false)
         },1000)
+    AsyncStorage.getItem('@language').then((lang)=>{
+        if (lang){
+            i18n.locale =lang ;
+            if (lang ==='ar'){
+                I18nManager.forceRTL(true);
+            }else{
+                I18nManager.forceRTL(false);
+            }
+        }else {
+            i18n.locale = 'fr';
+            I18nManager.forceRTL(false);
+        }
+    }).catch((err)=>{
+       i18n.locale = 'fr';
+    });
     },[])
     const handleToken = async ()=>{
 
@@ -61,11 +76,12 @@ export default function App() {
                   <Stack.Screen
                       name="login"
                       component={Login}
-                      options={{title: 'sign in'}}
+                      options={{
+                          title: 'se connecter'}}
                   />
               ):(
                   <Stack.Screen
-                      name="Home"
+                      name="tableau d'ebord"
                       component={TabNav}
 
                       options={{

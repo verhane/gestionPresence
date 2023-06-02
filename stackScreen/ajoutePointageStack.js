@@ -6,7 +6,7 @@ import useClasseApi  from "../api/useClasseApi";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
-
+import i18n from "../i18n";
 const AjoutePointageStack = ({navigation}) =>{
     // const {data} = useClasseApi();
     const [selected, setSelected] = useState("");
@@ -14,7 +14,8 @@ const AjoutePointageStack = ({navigation}) =>{
     const [classes, setClasses] = useState([]);
     const [date, setDate] = useState(new Date());
     const[time ,setTime] = useState(new Date());
-
+    const currentYear = new Date().getFullYear();
+    const minimumDate = new Date(currentYear, 0, 1);
 
     useEffect(  () => {
         async function fetchClasses(){
@@ -35,7 +36,7 @@ const AjoutePointageStack = ({navigation}) =>{
                 Authorization: `Bearer ${token}`,
             };
             setLoiding(true)
-            fetch("http://192.168.69.238:1212/api/classes", {headers})
+            fetch("http://192.168.100.68:1212/api/classes", {headers})
                 .then((response) => response.json())
                 .then((responseJson) => {
                     setClasses(responseJson);
@@ -68,7 +69,7 @@ const AjoutePointageStack = ({navigation}) =>{
 
             const timeValue = moment(time).format('h:mm A')
             const axiosfetch = async ()=> {
-                axios.post('http://192.168.69.238:1212/api/createPointage',
+                axios.post('http://192.168.100.68:1212/api/createPointage',
 
                     {
                         date: date,
@@ -96,7 +97,7 @@ const AjoutePointageStack = ({navigation}) =>{
 
     }
     if(loading)
-        return <LoaderScreen message={'loading classes'} color={Colors.grey40}/>
+        return <LoaderScreen message={'chargement classes'} color={Colors.grey40}/>
 
     return(
         <>
@@ -105,7 +106,7 @@ const AjoutePointageStack = ({navigation}) =>{
 
                 <Card style={styles.pointage}>
                     <View >
-                        <Text style={{marginBottom:10}}>Classe</Text>
+                        <Text style={{marginBottom:10}}>{i18n.t('classe')}</Text>
                         <Picker style={styles.pickerStyle}
                                 placeholder="selectionner"
                                 value={selected}
@@ -122,15 +123,23 @@ const AjoutePointageStack = ({navigation}) =>{
 
 
                         </Picker>
-                        <Text style={{marginTop:20}}> date</Text>
-                        <DateTimePicker style={styles.pickerStyle} value={date}   mode={'date'} onChange={(value)=>setDate(value)}/>
-                        <Text style={{marginTop:20}}>heure</Text>
-                        <DateTimePicker style={styles.pickerStyle} dateFormat="h:mm A" mode={'time'} value={time} onChange={(value)=>
+                        <Text style={{marginTop:20}}> {i18n.t('date')}</Text>
+                        <DateTimePicker
+                            style={styles.pickerStyle} value={date}
+                            minimumDate={minimumDate}
+                            maximumDate={new Date()}
+                            mode={'date'} onChange={(value)=>setDate(value)}/>
+                        <Text style={{marginTop:20}}>{i18n.t('heure')}</Text>
+                        <DateTimePicker
+                            style={styles.pickerStyle}
+                            dateFormat="h:mm A"
+                            mode={'time'}
+                            value={time} onChange={(value)=>
                             setTime(value)
                         } />
 
                         <Button   onPress={handlePointage}
-                                  label={'ajouter'} style={{backgroundColor:'#00B9E8',marginTop:30}}/>
+                                  label={i18n.t('ajouter')} style={{backgroundColor:'#00B9E8',marginTop:30}}/>
                     </View>
                 </Card>
             </View>
